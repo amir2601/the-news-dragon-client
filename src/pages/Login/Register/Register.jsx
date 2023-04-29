@@ -6,12 +6,11 @@ import { useState } from 'react';
 
 const Register = () => {
     const [error, setError] = useState('');
+    const [accepted, setAccepted] = useState(false);
     const { createUser } = useContext(AuthContext);
     const navigate = useNavigate()
     const location = useLocation();
-    console.log('register' ,location);
     const from = location.state?.from?.from?.pathname || "/category/0";
-    console.log(from);
 
     const handleRegister = event => {
         event.preventDefault()
@@ -33,7 +32,10 @@ const Register = () => {
                 setError(error.message)
                 console.log(error.message);
             })
-
+    }
+    
+    const handleAccepted = event => {
+        setAccepted(event.target.checked);
     }
 
     return (
@@ -59,9 +61,13 @@ const Register = () => {
                     <Form.Control type="password" name='password' placeholder="Password" required />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" name='accept' label="Accept Term & Conditions" />
+                    <Form.Check
+                    onClick={handleAccepted} 
+                    type="checkbox" 
+                    name='accept' 
+                    label={<>Accept <Link to="/terms">Term & Conditions</Link> </>} />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button disabled={!accepted} variant="primary" type="submit">
                     Register
                 </Button>
                 <br />
